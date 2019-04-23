@@ -248,7 +248,11 @@ const router = new VueRouter({
 export default router;
 ```
 
+## 라우터 뷰
 
+main.js에 있는 router-view (render 부분)을 App.vue로 옮긴다. 
+router-view는 실제 Component를 출력해주는 부분이다.
+App.vue 파일은 Root Component 역할을 수행한다. 이 파일을 기준으로 URL에 따라 Component를 바꾸는(라우팅) 작업을 수행한다.
 
 
 
