@@ -111,7 +111,91 @@ npm run lint
 * 서버 라우팅 : 매 요청마다 화면 갱신
 * 브라우저 라우팅 : 매 요청마다 화면을 갱신하지 않고, 필요한 데이터를 요청
 
+## Router 직접 구성
+
+```javascript
+/* main.js */
+import Vue from 'vue'
+import App from './App.vue'
+
+Vue.config.productionTip = false;
+
+const Login = { template: '<div>Login Page</div>' };
+const NotFound = { template: '<div>Page not found</div>' };
+
+const routes = {
+  '/': App,
+  '/login': Login
+};
+
+new Vue({
+  computed: {
+    VueComponent() {
+      return routes[window.location.pathname] || NotFound;
+    }
+  },
+  render(h) {
+    return h(this.VueComponent);
+  }
+}).$mount('#app');
+```
+
+> 만약 Vue-Cli 버전 3 이상으로 프로젝트를 구성했을 경우, runtimeCompiler 설정의 기본값이 false이기 때문에 위 코드와 같이 HTML 문법을 template에 지정해서 사용할 수 없다.
+>
+> 따라서 프로젝트 Root 디렉토리에 vue.config.js 파일을 만든 후 설정을 변경해 줘야 한다.
+> 참고로 vue.config.js 파일은 @vue/vue-service에 의해 자동으로 로드된다.
+>
+> ```javascript
+> /* vue.config.js */
+> //  https://cli.vuejs.org/config/#vue-config-js 
+> module.exports = {
+>   runtimeCompiler: true
+> }
+> ```
+>
+> 
+
 ## Vue-Router 구성
 
+### Vue-Router 설치
 
+```bash
+$ npm install vue-router --save
+```
+
+### Vue-Router 구성
+
+```javascript
+/* main.js */
+import Vue from 'vue';
+import App from './App.vue';
+
+/**
+ * Vue-Router 임포트
+ */
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);		// 미들웨어. import 한 vue-router를 사용할 수 있도록 설정한다.
+
+Vue.config.productionTip = false;
+
+const Login = { template: '<div>Login Page</div>' };
+const NotFound = { template: '<div>Page not found</div>' };
+
+/**
+ * Vue-Router 설정
+ */
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    { path: '/', component: App },
+    { path: '/login', component: Login },
+    { path: '*', component: NotFound }
+  ]
+});
+
+new Vue({
+  router,		// Vue-Router 설정 적용
+  render: h => h({ template: '<router-view></router-view>' })		// 렌더링 변경
+}).$mount('#app');
+```
 
