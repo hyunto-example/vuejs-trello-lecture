@@ -199,3 +199,56 @@ new Vue({
 }).$mount('#app');
 ```
 
+## Vue-Router 인스턴스
+
+현재 라우팅 로직이 main.js에 포함되어 있다. 라우팅 로직을 별도의 파일로 분리해서 관리하도록 수정한다.
+
+```bash
+## 프로젝트 Root 디렉토리에서
+$ mkdir src/router
+$ touch src/router/index.js
+```
+
+main.js에 포함된 라우팅 로직을 src/router/index.js로 옮긴 후 main.js에서 이 파일을 import 하여 사용하도록 설정한다.
+이를 통해 별도의 파일에서 라우팅 로직을 관리할 수 있다. 또한 다수의 파일로도 관리가 가능하다.
+
+```javascript
+/* main.js */
+import Vue from 'vue';
+import router from './router';
+
+Vue.config.productionTip = false;
+
+new Vue({
+  router,
+  render: h => h({ template: '<router-view></router-view>' })
+}).$mount('#app');
+```
+
+```javascript
+/* router/index.js */
+import Vue from 'vue';
+import App from '../App.vue';
+import VueRouter from 'vue-router';
+
+Vue.use(VueRouter);
+
+const Login = { template: '<div>Login Page</div>' };
+const NotFound = { template: '<div>Page not found</div>' };
+
+const router = new VueRouter({
+  mode: 'history',
+  routes: [
+    { path: '/', component: App },
+    { path: '/login', component: Login },
+    { path: '*', component: NotFound }
+  ]
+});
+
+export default router;
+```
+
+
+
+
+
