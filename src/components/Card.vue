@@ -1,7 +1,10 @@
 <template>
     <div>
         Card
-        <div>
+        <div v-if="loading">
+            Loading Card...
+        </div>
+        <div v-else>
             cid: {{cid}}
         </div>
     </div>
@@ -9,17 +12,25 @@
 
 <script>
 export default {
-    created() {
-        this.cid = this.$route.params.cid
-    },
     watch: {
-        '$route'() {
-            this.cid = this.$route.params.cid
+        '$route' : {
+            handler: 'fetchData',
+            immediate: true
         }
     },
     data() {
         return {
-            cid: 0
+            cid: 0,
+            loading: false
+        }
+    },
+    methods: {
+        fetchData() {
+            this.loading = true;
+            setTimeout(()=>{
+                this.cid = this.$route.params.cid;
+                this.loading = false;
+            }, 500);
         }
     },
 }
